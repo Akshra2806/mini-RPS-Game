@@ -101,10 +101,7 @@
       margin:0;
     }
 
-    /* .show-result:hover{
-      box-shadow: 5px 6px 4px black;
-      
-    } */
+   
 
     .user{
       background-color: transparent;
@@ -311,12 +308,7 @@ function pickcomputerMove(){
    }
 
    localStorage.setItem('score',JSON.stringify(score));
-  //  alert(`you select a ${userMove} and computer select a ${computerMove}
-
-  //       so, ${result}
-
-  //       score:: wins ${score.Wins}, Loose ${score.Looses} and Tie ${score.Tie}`);
-
+ 
         let result_h1 = document.querySelector(".show-result-h1");
         let result_p = document.querySelector(".show-result-p");
         let lose_sound =document.querySelector("#lose-sound");
@@ -365,16 +357,9 @@ function pickcomputerMove(){
 
                   tie_sound.play();
               }
-
-
-
-            
+        
   
   }
-
-
-  // score board
-
 
 
 </script>
