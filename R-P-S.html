@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objects</title>
+  <style>
+    body{
+      /* text-align: center; */
+      background-color: lavender;
+      
+    }
+
+    main{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+     h1{
+      color:purple;
+     }
+
+    .b{
+      height: 8rem;
+      width: 8rem;
+      font-size: 5rem;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      color:#000;
+      margin-left: 1rem;
+      border: 5px solid rgb(223, 91, 150);
+      box-shadow: 2px 2px 3px black;
+    }
+
+    .btn-reset{
+      margin-top: 2rem;
+      height: 3rem;
+      width: 8rem;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      border-radius: 2rem;
+      box-shadow: 2px 2px 3px black;
+    }
+
+  .show-result_container{
+    display: flex;
+    flex-direction: row;
+    gap:2rem;
+  }
+
+     
+    .show-result {
+      height: 11rem;
+      width: 20rem;
+      background-color: aliceblue;
+      margin-top: 4rem;
+      border-radius: 2rem;
+      color: #000;
+      text-align: center;
+      /* box-shadow: 2px 2px 3px black; */
+    }
+
+    .show-result-p{
+      font-size: 1.5rem;
+      margin: 0;
+      margin-top: -20px;
+    }
+
+    .show-result-h1{
+      font-size: 2.5rem;
+      margin-top: -4px;
+    }
+
+    .btn-reset:hover{
+      background-color: rgb(223, 138, 176);
+      font-weight: 600;
+      transform: scale(1.05);
+      transition: 0.3s;
+    }
+
+    .b:hover{
+      background-color:rgb(223, 91, 150) ;
+      color: #fff;
+      border: 5px solid black;
+      transform: scale(1.25);
+      transition: 0.5s;
+
+    }
+
+    .show-user-move{
+      font-size: 4rem;
+      margin:0;
+    }
+    
+
+    .show-computer-move{
+      font-size: 4rem;
+      margin:0;
+    }
+
+    /* .show-result:hover{
+      box-shadow: 5px 6px 4px black;
+      
+    } */
+
+    .user{
+      background-color: transparent;
+    } 
+
+    .computer{
+       background-color: transparent;
+    }
+
+  </style>
+</head>
+<body>
+  <main>
+  <h1>ROCK PAPER SCISSOR GAME</h1>
+  <div class="btn_R_P_S">
+  <button class="b btn-rock">👊</button>
+  <button class="b btn-paper">✋</button>
+  <button class="b btn-scissor">✌️</button>
+  </div>
+  <button class="btn-reset">Reset Score</button>
+ <div class="show-result_container">
+
+  <div class="show-result user">
+    <h1 class="show-user-text"></h1>
+    <p class="show-user-move" ></p>
+  </div>
+
+  <div class="show-result scores">
+    <h1 class="show-result-h1"></h1>
+    <p class="show-result-p" ></p>
+    <audio src="C:\Users\hp\Desktop\javascript\super-simple-dev-js\music.wav" preload="auto" id="lose-sound"></audio>
+    <audio src="C:\Users\hp\Desktop\javascript\super-simple-dev-js\tie.wav" preload="auto" id="tie-sound"></audio>
+    <audio src="C:\Users\hp\Desktop\javascript\super-simple-dev-js\win.wav" preload="auto" id="win-sound"></audio>
+  </div>
+
+  <div class="show-result computer">
+    <h1 class="show-computer-text"></h1>
+    <p class="show-computer-move" ></p>
+  </div>
+</div>
+ </main>
+
+<script>
+let computerMove = "";
+let userMove = "";
+let result = ""
+// user move
+ let result_user_text = document.querySelector(".show-user-text");
+  let result_user_move = document.querySelector(".show-user-move");
+
+  let result_computer_text = document.querySelector(".show-computer-text");
+  let result_computer_move = document.querySelector(".show-computer-move");
+
+  let s_div = document.querySelector('.scores');
+
+const score = JSON.parse(localStorage.getItem('score')) || {
+  Wins : 0,
+  Looses:0,
+  Tie:0
+};
+
+ 
+
+function resetScore(){
+  localStorage.removeItem('score');
+  score.Wins = 0;
+  score.Looses=0;
+  score.Tie=0;
+   let result_h1 = document.querySelector(".show-result-h1");
+   let result_p = document.querySelector(".show-result-p");
+   result_h1.innerHTML = "";
+   result_p.innerHTML = "";
+
+   result_computer_move.innerHTML = "";
+   result_computer_text.innerHTML = "";
+
+   result_user_move.innerHTML = "";
+   result_user_text.innerHTML = "";
+   s_div.style.backgroundColor ="aliceblue";
+
+}
+
+
+
+
+let btn_Reset = document.querySelector(".btn-reset");
+  btn_Reset.addEventListener('click',resetScore);
+
+
+ let btn_R = document.querySelector(".btn-rock");
+  btn_R.addEventListener('click',()=>{
+    userMove = 'rock';
+    console.log(userMove);
+
+    result_user_text.innerText = "Your Move";
+    result_user_move.innerText = "👊";
+    // pickcomputerMove();
+
+     
+    compareMoves();
+  });
+
+  let btn_P = document.querySelector(".btn-paper");
+  btn_P.addEventListener('click',()=>{
+    userMove = 'paper';
+    console.log(userMove);
+
+     result_user_text.innerText = "Your Move";
+    result_user_move.innerText = "✋";
+  
+    //  pickcomputerMove();
+     compareMoves();
+  });
+  
+  let btn_S = document.querySelector(".btn-scissor");
+  btn_S.addEventListener('click',()=>{
+    userMove = 'scissor';
+    console.log(userMove);
+
+     result_user_text.innerText = "Your Move";
+    result_user_move.innerText = "✌️";
+    // pickcomputerMove();
+    compareMoves();
+  });
+  
+
+
+
+
+function pickcomputerMove(){
+  let randomNumber  = Math.floor(Math.random()*10);
+  // console.log(randomNumber);
+
+  if(randomNumber >= 0 && randomNumber <= 3){
+    computerMove = "rock";
+    result_computer_text.innerText = 'Computer Move';
+    result_computer_move.innerText = '👊';
+  }
+  else if(randomNumber > 3 && randomNumber <= 6){
+    computerMove = "paper";
+    result_computer_text.innerText = 'Computer Move';
+    result_computer_move.innerText = '✋';
+  }
+  else{
+    computerMove = "scissor";
+    result_computer_text.innerText = 'Computer Move';
+    result_computer_move.innerText = '✌️  ';
+  }
+  // compareMoves();
+}
+
+  
+
+  function compareMoves(){
+    pickcomputerMove();
+
+  if(userMove == 'rock'){
+      if(computerMove == 'rock'){
+        result ="Tie";
+      }
+      else if(computerMove == 'paper'){
+        result ="You Loose";
+      }
+      else{
+        result ="You Win";
+      }
+  }
+
+  else if(userMove =='paper'){
+      if(computerMove == 'rock'){
+        result ="You Win";
+      }
+      else if(computerMove == 'paper'){
+        result ="Tie";
+      }
+      else{
+        result ="You Loose";
+      }
+    }
+  else if(userMove == 'scissor'){
+      if(computerMove == 'rock'){
+        result ="You Loose";
+      }
+      else if(computerMove == 'paper'){
+        result ="You Win";
+      }
+      else{
+        result ="Tie";
+      }    
+   }
+
+
+   if(result == "You Win"){
+      score.Wins += 1;
+
+   }
+
+   else if(result == "You Loose"){
+      score.Looses += 1;
+   }
+
+   else if(result == "Tie"){
+    score.Tie += 1;
+   }
+
+   localStorage.setItem('score',JSON.stringify(score));
+  //  alert(`you select a ${userMove} and computer select a ${computerMove}
+
+  //       so, ${result}
+
+  //       score:: wins ${score.Wins}, Loose ${score.Looses} and Tie ${score.Tie}`);
+
+        let result_h1 = document.querySelector(".show-result-h1");
+        let result_p = document.querySelector(".show-result-p");
+        let lose_sound =document.querySelector("#lose-sound");
+        let tie_sound =document.querySelector("#tie-sound");
+        let win_sound =document.querySelector("#win-sound");
+           if(result == "You Win"){
+                  result_h1.innerText = `🎉${result}🎉`;
+                  // result_h1.style.color = "green";
+                  s_div.style.backgroundColor = "green"
+                  setTimeout(()=>{
+                    
+                    result_p.innerText = `🏆 wins ${score.Wins}
+                                          😭 Loose ${score.Looses} 
+                                          🤝 Tie ${score.Tie};`;
+                  },2000);
+                   
+                  win_sound.play();
+                  
+
+              }
+
+              else if(result == "You Loose"){
+                  result_h1.innerText = `😫${result}😫`;
+                  //  result_h1.style.color = "red";
+                   s_div.style.backgroundColor = "red";
+                  setTimeout(()=>{
+                  
+                    result_p.innerText = `🏆 wins ${score.Wins}
+                                          😭 Loose ${score.Looses} 
+                                          🤝 Tie ${score.Tie};`;
+                  },2000);
+
+                  lose_sound.play();
+              }
+
+              else if(result == "Tie"){
+                 result_h1.innerText = `🤝${result}🤝`;
+                  // result_h1.style.color = "orange";
+                   s_div.style.backgroundColor = "yellow";
+                 setTimeout(()=>{
+                  
+                    result_p.innerText = `🏆 wins ${score.Wins}
+                                          😭 Loose ${score.Looses} 
+                                          🤝 Tie ${score.Tie}`;
+                  },2000);
+
+                  tie_sound.play();
+              }
+
+
+
+            
+  
+  }
+
+
+  // score board
+
+
+
+</script>
+  
+</body>
+</html>
